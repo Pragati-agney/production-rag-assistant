@@ -1,6 +1,5 @@
 from app.retrieval.search import search
 
-
 EVALUATION_CASES = [
     {
         "question": "How many vacation days do employees get?",
@@ -36,13 +35,11 @@ def evaluate_retrieval():
         results = search(question)
 
         top_1_match = (
-            len(results) > 0
-            and expected_text.lower() in results[0].content.lower()
+            len(results) > 0 and expected_text.lower() in results[0].content.lower()
         )
 
         top_3_match = any(
-            expected_text.lower() in result.content.lower()
-            for result in results[:3]
+            expected_text.lower() in result.content.lower() for result in results[:3]
         )
 
         if top_1_match:
@@ -79,17 +76,9 @@ def evaluate_retrieval():
     print("FINAL RESULTS")
     print("=" * 70)
 
-    print(
-        f"Top-1 accuracy: "
-        f"{top_1_correct}/{total} "
-        f"({top_1_accuracy:.2%})"
-    )
+    print(f"Top-1 accuracy: {top_1_correct}/{total} ({top_1_accuracy:.2%})")
 
-    print(
-        f"Top-3 accuracy: "
-        f"{top_3_correct}/{total} "
-        f"({top_3_accuracy:.2%})"
-    )
+    print(f"Top-3 accuracy: {top_3_correct}/{total} ({top_3_accuracy:.2%})")
 
 
 if __name__ == "__main__":

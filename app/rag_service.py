@@ -1,10 +1,13 @@
+import logging
+
 from app.generation.openai_generator import generate_answer
 from app.generation.prompt_builder import build_rag_prompt
 from app.observability.langfuse_client import langfuse
 from app.retrieval.search import search
-import logging
 
 logger = logging.getLogger(__name__)
+
+
 def answer_question(question: str):
     logger.info("RAG request started")
     with langfuse.start_as_current_observation(
@@ -12,26 +15,24 @@ def answer_question(question: str):
         name="rag-request",
         input={"question": question},
     ) as rag_span:
-
         with langfuse.start_as_current_observation(
             as_type="span",
             name="retrieval",
             input={"question": question},
         ) as retrieval_span:
-
             retrieved_chunks = search(question)
 
             if not retrieved_chunks:
                 return {
-                    "answer":(
+                    "answer": (
                         "I don't know based on the available company documents."
                     ),
                     "sources": [],
                 }
 
             logger.info(
-            "Retrieval completed with %s chunks",
-            len(retrieved_chunks),
+                "Retrieval completed with %s chunks",
+                len(retrieved_chunks),
             )
 
             retrieval_span.update(
@@ -53,23 +54,16 @@ def answer_question(question: str):
             question=question,
             retrieved_chunks=retrieved_chunks,
         )
-        
 
         with langfuse.start_as_current_observation(
             as_type="span",
             name="answer-generation",
             input={"prompt": prompt},
         ) as generation_span:
-
             answer = generate_answer(prompt)
             logger.info("RAG request completed")
 
-
-            generation_span.update(
-                output={
-                    "answer": answer
-                }
-            )
+            generation_span.update(output={"answer": answer})
 
         rag_span.update(
             output={

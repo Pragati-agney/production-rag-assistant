@@ -5,7 +5,6 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 
-
 client = TestClient(app)
 
 
@@ -13,9 +12,7 @@ def test_health_check():
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {
-        "status": "ok"
-    }
+    assert response.json() == {"status": "ok"}
 
 
 def test_chat_returns_answer():
@@ -33,9 +30,7 @@ def test_chat_returns_answer():
 
         response = client.post(
             "/chat",
-            json={
-                "question": "What is our annual leave policy?"
-            },
+            json={"question": "What is our annual leave policy?"},
         )
 
     assert response.status_code == 200

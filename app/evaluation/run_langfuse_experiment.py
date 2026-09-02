@@ -1,14 +1,14 @@
+import json
+
 from langfuse import Evaluation
+from langfuse.openai import OpenAI
 
 from app.observability.langfuse_client import langfuse
 from app.rag_service import answer_question
-import json
-
-from langfuse.openai import OpenAI
-
 
 DATASET_NAME = "employee-handbook-v1"
 judge_client = OpenAI()
+
 
 def run_rag(*, item, **kwargs):
     question = item.input["question"]
@@ -48,25 +48,16 @@ def expected_fact_evaluator(
         passed = "30" in actual_lower
 
     elif category == "remote_work":
-        passed = (
-            "three" in actual_lower
-            or "3" in actual_lower
-        )
+        passed = "three" in actual_lower or "3" in actual_lower
 
     elif category == "learning_and_development":
-        passed = (
-            "1,500" in actual_lower
-            or "1500" in actual_lower
-        )
+        passed = "1,500" in actual_lower or "1500" in actual_lower
 
     elif category == "expenses":
         passed = "30 days" in actual_lower
 
     elif category == "information_security":
-        passed = (
-            "approved" in actual_lower
-            and "system" in actual_lower
-        )
+        passed = "approved" in actual_lower and "system" in actual_lower
 
     elif category == "unknown":
         passed = (
@@ -87,6 +78,7 @@ def expected_fact_evaluator(
             else "Expected fact was not found in generated answer."
         ),
     )
+
 
 def correctness_evaluator(
     *,
@@ -142,6 +134,7 @@ Do not include markdown or additional text.
         comment=result["reason"],
     )
 
+
 def groundedness_evaluator(
     *,
     input,
@@ -151,10 +144,7 @@ def groundedness_evaluator(
     actual_answer = output["answer"]
     sources = output["sources"]
 
-    context = "\n\n".join(
-        source["content"]
-        for source in sources
-    )
+    context = "\n\n".join(source["content"] for source in sources)
 
     judge_prompt = f"""
 You are evaluating the groundedness of an answer produced by a RAG system.
@@ -198,6 +188,7 @@ Do not include markdown or additional text.
         comment=result["reason"],
     )
 
+
 def main():
     dataset = langfuse.get_dataset(DATASET_NAME)
 
@@ -216,7 +207,6 @@ def main():
     )
 
     print(result.format())
-
 
 
 if __name__ == "__main__":

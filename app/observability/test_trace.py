@@ -5,16 +5,9 @@ def main():
     with langfuse.start_as_current_observation(
         as_type="span",
         name="test-rag-trace",
-        input={
-            "question": "How many vacation days do employees get?"
-        },
+        input={"question": "How many vacation days do employees get?"},
     ) as trace:
-
-        trace.update(
-            output={
-                "answer": "Employees receive 30 days of annual leave."
-            }
-        )
+        trace.update(output={"answer": "Employees receive 30 days of annual leave."})
 
     langfuse.flush()
 

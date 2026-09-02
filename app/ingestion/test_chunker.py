@@ -3,9 +3,7 @@ from app.ingestion.pdf_extractor import extract_pdf_pages
 
 
 def main():
-    pages = extract_pdf_pages(
-        "acme_employee_handbook.pdf"
-    )
+    pages = extract_pdf_pages("acme_employee_handbook.pdf")
 
     for page in pages:
         chunks = chunk_page(
@@ -15,10 +13,7 @@ def main():
 
         for chunk in chunks:
             print("=" * 60)
-            print(
-                f"PAGE {chunk['page_number']} "
-                f"CHUNK {chunk['chunk_index']}"
-            )
+            print(f"PAGE {chunk['page_number']} CHUNK {chunk['chunk_index']}")
             print("=" * 60)
             print(chunk["content"])
 

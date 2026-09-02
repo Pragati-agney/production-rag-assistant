@@ -1,14 +1,11 @@
 from app.observability.langfuse_client import langfuse
 
-
 DATASET_NAME = "employee-handbook-v1"
 
 
 DATASET_ITEMS = [
     {
-        "input": {
-            "question": "How many vacation days do employees get?"
-        },
+        "input": {"question": "How many vacation days do employees get?"},
         "expected_output": {
             "answer": (
                 "Full-time employees receive 30 days of paid "
@@ -21,9 +18,7 @@ DATASET_ITEMS = [
         },
     },
     {
-        "input": {
-            "question": "How many days per week can employees work remotely?"
-        },
+        "input": {"question": "How many days per week can employees work remotely?"},
         "expected_output": {
             "answer": (
                 "Employees may work remotely up to three days per week "
@@ -40,9 +35,7 @@ DATASET_ITEMS = [
             "question": "How much money can employees spend on learning each year?"
         },
         "expected_output": {
-            "answer": (
-                "Each employee has an annual learning budget of EUR 1,500."
-            )
+            "answer": ("Each employee has an annual learning budget of EUR 1,500.")
         },
         "metadata": {
             "category": "learning_and_development",
@@ -50,13 +43,10 @@ DATASET_ITEMS = [
         },
     },
     {
-        "input": {
-            "question": "When do business expenses need to be submitted?"
-        },
+        "input": {"question": "When do business expenses need to be submitted?"},
         "expected_output": {
             "answer": (
-                "Business expenses must be submitted within "
-                "30 days of the transaction."
+                "Business expenses must be submitted within 30 days of the transaction."
             )
         },
         "metadata": {
@@ -66,9 +56,7 @@ DATASET_ITEMS = [
     },
     {
         "input": {
-            "question": (
-                "Where should confidential company information be stored?"
-            )
+            "question": ("Where should confidential company information be stored?")
         },
         "expected_output": {
             "answer": (
@@ -82,13 +70,9 @@ DATASET_ITEMS = [
         },
     },
     {
-        "input": {
-            "question": "What is the company car leasing allowance?"
-        },
+        "input": {"question": "What is the company car leasing allowance?"},
         "expected_output": {
-            "answer": (
-                "I don't know based on the available company documents."
-            )
+            "answer": ("I don't know based on the available company documents.")
         },
         "metadata": {
             "category": "unknown",
@@ -109,10 +93,7 @@ def main():
             metadata=item["metadata"],
         )
 
-        print(
-            f"Added {index}/{len(DATASET_ITEMS)}: "
-            f"{item['input']['question']}"
-        )
+        print(f"Added {index}/{len(DATASET_ITEMS)}: {item['input']['question']}")
 
     print("Dataset creation completed.")
 

@@ -3,12 +3,9 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def create_embedding(text: str) -> list[float]:

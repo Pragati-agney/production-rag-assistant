@@ -2,9 +2,8 @@ from app.db.connection import get_connection
 
 
 def get_all_documents():
-    with get_connection() as connection:
-        with connection.cursor() as cursor:
-            cursor.execute("""
+    with get_connection() as connection, connection.cursor() as cursor:
+        cursor.execute("""
                 SELECT
                     id,
                     filename,
@@ -14,13 +13,13 @@ def get_all_documents():
                 ORDER BY id;
             """)
 
-            return cursor.fetchall()
+        return cursor.fetchall()
+
 
 def create_document(filename: str, department: str | None):
-    with get_connection() as connection:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
+    with get_connection() as connection, connection.cursor() as cursor:
+        cursor.execute(
+            """
                 INSERT INTO documents (
                     filename,
                     department
@@ -28,7 +27,7 @@ def create_document(filename: str, department: str | None):
                 VALUES (%s, %s)
                 RETURNING id, filename, department, created_at;
                 """,
-                (filename, department),
-            )
+            (filename, department),
+        )
 
-            return cursor.fetchone()
+        return cursor.fetchone()
