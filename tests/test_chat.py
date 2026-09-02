@@ -25,9 +25,14 @@ def test_chat_returns_answer():
 
     assert response.status_code == 200
 
-    assert response.json() == {
-        "answer": "You asked: What is our annual leave policy?"
-    }
+    body = response.json()
+
+    assert "answer" in body
+    assert isinstance(body["answer"], str)
+    assert len(body["answer"]) > 0
+
+    assert "sources" in body
+    assert isinstance(body["sources"], list)
 
 
 def test_chat_rejects_empty_question():

@@ -4,7 +4,11 @@ from app.rag_service import answer_question
 from app.schemas.chat import ChatRequest, ChatResponse,Source
 from app.core.error_handlers import provider_error_handler
 from app.core.errors import ProviderError
+from app.core.errors import DatabaseError
+from app.core.error_handlers import database_error_handler
+from app.core.logging_config import configure_logging
 
+configure_logging()
 app = FastAPI(
     title="Internal Knowledge Assistant",
     version="0.1.0",
@@ -12,6 +16,11 @@ app = FastAPI(
 app.add_exception_handler(
     ProviderError,
     provider_error_handler,
+)
+
+app.add_exception_handler(
+    DatabaseError,
+    database_error_handler,
 )
 
 @app.get("/health")

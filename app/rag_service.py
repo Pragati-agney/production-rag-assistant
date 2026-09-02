@@ -2,9 +2,11 @@ from app.generation.openai_generator import generate_answer
 from app.generation.prompt_builder import build_rag_prompt
 from app.observability.langfuse_client import langfuse
 from app.retrieval.search import search
+import logging
 
-
+logger = logging.getLogger(__name__)
 def answer_question(question: str):
+    logger.info("RAG request started")
     with langfuse.start_as_current_observation(
         as_type="span",
         name="rag-request",
@@ -18,6 +20,19 @@ def answer_question(question: str):
         ) as retrieval_span:
 
             retrieved_chunks = search(question)
+
+            if not retrieved_chunks:
+                return {
+                    "answer":(
+                        "I don't know based on the available company documents."
+                    ),
+                    "sources": [],
+                }
+
+            logger.info(
+            "Retrieval completed with %s chunks",
+            len(retrieved_chunks),
+            )
 
             retrieval_span.update(
                 output={
@@ -38,6 +53,7 @@ def answer_question(question: str):
             question=question,
             retrieved_chunks=retrieved_chunks,
         )
+        
 
         with langfuse.start_as_current_observation(
             as_type="span",
@@ -46,6 +62,8 @@ def answer_question(question: str):
         ) as generation_span:
 
             answer = generate_answer(prompt)
+            logger.info("RAG request completed")
+
 
             generation_span.update(
                 output={
