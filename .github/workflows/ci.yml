@@ -30,3 +30,56 @@ jobs:
 
       - name: Run unit tests
         run: pytest tests
+
+  integration-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+
+        env:
+          POSTGRES_DB: production_rag
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd "pg_isready -U postgres -d production_rag"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: "dbname=production_rag user=postgres password=postgres host=localhost port=5432"
+      OPENAI_API_KEY: test-key
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Initialize database
+        run: |
+          PGPASSWORD=postgres psql \
+            -h localhost \
+            -U postgres \
+            -d production_rag \
+            -f db/init/001_init.sql
+
+      - name: Run database integration tests
+        run: |
+          pytest \
+            app/db/test_connection.py \
+            app/db/test_pool.py \
+            app/db/test_query_timeout.py \
+            app/repositories/test_document_repository.py          
