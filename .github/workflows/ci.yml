@@ -12,6 +12,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      OPENAI_API_KEY: test-key
+      DATABASE_URL: "dbname=production_rag user=postgres password=postgres host=localhost port=5432"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,5 +28,5 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run tests
-        run: pytest
+      - name: Run unit tests
+        run: pytest tests
