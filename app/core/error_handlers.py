@@ -14,9 +14,7 @@ async def provider_error_handler(
     return JSONResponse(
         status_code=503 if exc.retryable else 500,
         content={
-            "detail": (
-                "The AI service is temporarily unavailable. Please try again."
-            )
+            "detail": ("The AI service is temporarily unavailable. Please try again.")
         },
     )
 
