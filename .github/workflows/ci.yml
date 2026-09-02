@@ -30,7 +30,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          pytest \
+          python -m pytest \
            tests/test_chat.py \
            tests/test_rag_service.py
 
@@ -80,4 +80,4 @@ jobs:
             -f db/init/001_init.sql
 
       - name: Run database integration tests
-        run: pytest tests/integration          
+        run: python -m pytest tests/integration         
