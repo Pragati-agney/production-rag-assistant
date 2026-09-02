@@ -12,12 +12,9 @@ from openai import (
 from app.core.errors import ProviderError
 from app.core.retry import with_retry
 
-
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def _call_openai(prompt: str) -> str:

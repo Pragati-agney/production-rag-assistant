@@ -6,7 +6,6 @@ from typing import TypeVar
 from app.core.errors import ProviderError
 from app.observability.langfuse_client import langfuse
 
-
 T = TypeVar("T")
 
 
@@ -26,7 +25,6 @@ def with_retry(
                 "max_attempts": max_attempts,
             },
         ) as attempt_span:
-
             try:
                 result = operation()
 
@@ -68,10 +66,7 @@ def with_retry(
                     }
                 )
 
-                print(
-                    f"Attempt {attempt} failed. "
-                    f"Retrying in {final_delay:.2f}s..."
-                )
+                print(f"Attempt {attempt} failed. Retrying in {final_delay:.2f}s...")
 
                 time.sleep(final_delay)
 

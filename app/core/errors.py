@@ -7,6 +7,7 @@ class ProviderError(Exception):
         super().__init__(message)
         self.retryable = retryable
 
+
 class DatabaseError(Exception):
     def __init__(
         self,

@@ -1,43 +1,36 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
-from app.core.errors import DatabaseError
 
-from app.core.errors import ProviderError
+from app.core.errors import DatabaseError, ProviderError
 
- 
+
 async def provider_error_handler(
     request: Request,
-    exc: ProviderError,
+    exc: Exception,
 ):
-    status_code = 503 if exc.retryable else 500
-
-    if exc.retryable:
-        message = (
-            "The AI service is temporarily unavailable. "
-            "Please try again."
-        )
-    else:
-        message = (
-            "The AI service could not process the request."
-        )
+    if not isinstance(exc, ProviderError):
+        raise exc
 
     return JSONResponse(
-        status_code=status_code,
+        status_code=503 if exc.retryable else 500,
         content={
-            "detail": message,
+            "detail": ("The AI service is temporarily unavailable. Please try again.")
         },
     )
 
+
 async def database_error_handler(
     request: Request,
-    exc: DatabaseError,
+    exc: Exception,
 ):
+    if not isinstance(exc, DatabaseError):
+        raise exc
+
     return JSONResponse(
-        status_code=503,
+        status_code=503 if exc.retryable else 500,
         content={
             "detail": (
-                "The knowledge service is temporarily unavailable. "
-                "Please try again."
+                "The knowledge service is temporarily unavailable. Please try again."
             )
         },
     )

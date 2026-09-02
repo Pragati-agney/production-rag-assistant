@@ -16,9 +16,6 @@ def test_create_and_get_document():
 
     documents = get_all_documents()
 
-    filenames = [
-        document[1]
-        for document in documents
-    ]
+    filenames = [document[1] for document in documents]
 
     assert "security_policy.pdf" in filenames

@@ -28,11 +28,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Run Ruff lint
+        run: ruff check app tests
+
+      - name: Check Ruff formatting
+        run: ruff format --check app tests
+
+      - name: Run mypy type checking
+        run: mypy app
+
       - name: Run unit tests
         run: |
           python -m pytest \
-           tests/test_chat.py \
-           tests/test_rag_service.py
+            tests/test_chat.py \
+            tests/test_rag_service.py
 
   integration-test:
     runs-on: ubuntu-latest
@@ -80,4 +89,14 @@ jobs:
             -f db/init/001_init.sql
 
       - name: Run database integration tests
-        run: python -m pytest tests/integration         
+        run: python -m pytest tests/integration
+
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t production-rag-assistant:ci .

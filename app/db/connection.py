@@ -1,22 +1,20 @@
+import logging
 from contextlib import contextmanager
 
 from psycopg import Connection, OperationalError
+from psycopg.errors import QueryCanceled
 from psycopg_pool import ConnectionPool, PoolTimeout
 
-from app.core.errors import DatabaseError
-from psycopg.errors import QueryCanceled
-import logging
 from app.core.config import DATABASE_URL
-
+from app.core.errors import DatabaseError
 
 logger = logging.getLogger(__name__)
 
 
 def configure_connection(connection: Connection):
-    connection.execute(
-        "SET statement_timeout = '2000ms';"
-    )
+    connection.execute("SET statement_timeout = '2000ms';")
     connection.commit()
+
 
 pool = ConnectionPool(
     conninfo=DATABASE_URL,

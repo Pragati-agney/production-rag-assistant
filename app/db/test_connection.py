@@ -2,9 +2,8 @@ from app.db.connection import get_connection
 
 
 def main():
-    with get_connection() as connection:
-        with connection.cursor() as cursor:
-            cursor.execute("""
+    with get_connection() as connection, connection.cursor() as cursor:
+        cursor.execute("""
                 SELECT
                     d.filename,
                     dc.page_number,
@@ -15,10 +14,10 @@ def main():
                 ORDER BY d.id, dc.chunk_index
             """)
 
-            rows = cursor.fetchall()
+        rows = cursor.fetchall()
 
-            for row in rows:
-                print(row)
+        for row in rows:
+            print(row)
 
 
 if __name__ == "__main__":
