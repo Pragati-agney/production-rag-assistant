@@ -2,12 +2,7 @@ from pathlib import Path
 
 from app.db.connection import get_connection
 
-SQL_FILE = (
-    Path(__file__).resolve().parents[2]
-    / "db"
-    / "init"
-    / "001_init.sql"
-)
+SQL_FILE = Path(__file__).resolve().parents[2] / "db" / "init" / "001_init.sql"
 
 
 def init_schema() -> None:
