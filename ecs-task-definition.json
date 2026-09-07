@@ -1,0 +1,77 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "production-rag-api",
+      "image": "024848484784.dkr.ecr.eu-central-1.amazonaws.com/production-rag-assistant:v2",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp",
+          "name": "production-rag-api-8000-tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "LANGFUSE_TRACING_ENVIRONMENT",
+          "value": "production"
+        },
+        {
+          "name": "LANGFUSE_BASE_URL",
+          "value": "https://cloud.langfuse.com"
+        }
+      ],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:024848484784:secret:production-rag/runtime-5cLVq2:DATABASE_URL::"
+        },
+        {
+          "name": "LANGFUSE_PUBLIC_KEY",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:024848484784:secret:production-rag/runtime-5cLVq2:LANGFUSE_PUBLIC_KEY::"
+        },
+        {
+          "name": "LANGFUSE_SECRET_KEY",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:024848484784:secret:production-rag/runtime-5cLVq2:LANGFUSE_SECRET_KEY::"
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:024848484784:secret:production-rag/runtime-5cLVq2:OPENAI_API_KEY::"
+        }
+      ],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/production-rag-task",
+          "awslogs-create-group": "true",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "systemControls": []
+    }
+  ],
+  "family": "production-rag-task",
+  "executionRoleArn": "arn:aws:iam::024848484784:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "placementConstraints": [],
+  "runtimePlatform": {
+    "cpuArchitecture": "ARM64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "1024",
+  "enableFaultInjection": false
+}
