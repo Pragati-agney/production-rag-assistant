@@ -706,7 +706,7 @@ Also inspect any region accidentally used during setup as well as
 Frankfurt (`eu-central-1`). A budget alert is useful but is **not a hard
 spending cap**.
 
-## 24. Interview summary
+## 24. Summary
 
 > I built a production-oriented RAG API using FastAPI,
 > PostgreSQL/pgvector and OpenAI. I implemented PDF ingestion,
